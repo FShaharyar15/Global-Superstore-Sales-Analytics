@@ -47,13 +47,14 @@ FROM (
 ) daily;
 
 -- 5. Revenue and margin by market
-SELECT o.market,
+SELECT g.market,
        SUM(oi.sales) AS revenue,
        SUM(oi.profit) AS profit,
        ROUND(SUM(oi.profit) / NULLIF(SUM(oi.sales),0) * 100, 1) AS margin_pct
 FROM orders o
 JOIN order_items oi ON o.order_id = oi.order_id
-GROUP BY o.market
+JOIN geography g ON o.geography_id = g.geography_id
+GROUP BY g.market
 ORDER BY revenue DESC;
 
 -- 6. Year-over-year growth by category
